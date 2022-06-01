@@ -1,4 +1,4 @@
-export interface CreateBooksDto {
+export interface CreateBookDto {
 	title: string
 	description: string
 	authors: string
