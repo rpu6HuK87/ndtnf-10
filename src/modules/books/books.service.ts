@@ -16,6 +16,10 @@ export class BooksService {
 		return book.save()
 	}
 
+	public findOne(id: string): Promise<BookDocument> {
+		return this.BookModel.findById(id).exec()
+	}
+
 	public getAll(): Promise<BookDocument[]> {
 		return this.BookModel.find().exec()
 	}
