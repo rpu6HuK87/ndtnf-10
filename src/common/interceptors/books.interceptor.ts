@@ -3,30 +3,30 @@ import { catchError, map, Observable, throwError } from "rxjs";
 
 @Injectable()
 export class SuccessInterceptor implements NestInterceptor{
-	intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
-		console.log('success interceptor')
+  intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
+    console.log('success interceptor')
 
-		return next.handle().pipe(
-			map(data => ({
-				status: "success",
-				data: data
-			}))
-		)
-	}
+    return next.handle().pipe(
+      map(data => ({
+        status: "success",
+        data: data
+      }))
+    )
+  }
 }
 export class FailInterceptor implements NestInterceptor{
-	intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
-		console.log('fail interceptor')
+  intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
+    console.log('fail interceptor')
 
-		return next.handle().pipe(
-			catchError(err => {
+    return next.handle().pipe(
+      catchError(err => {
         return throwError(
-					new HttpException({
-						status: "fail",
-						data: err.response
-					}, 400)
-				)
+          new HttpException({
+            status: "fail",
+            data: err.response
+          }, 400)
+        )
       })
-		)
-	}
+    )
+  }
 }
