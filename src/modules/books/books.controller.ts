@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseInterceptors, UsePipes  } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseInterceptors, UsePipes, UseGuards  } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-books.dto';
 import { BookDocument } from './schemas/book.schema';
@@ -7,15 +7,17 @@ import { FailInterceptor, SuccessInterceptor } from 'src/common/interceptors/boo
 import { ValidateMongoDBObjectID } from 'src/common/pipes/validmongoid.pipe';
 import { createBookSchema } from './schemas/book-joi.schema';
 import { JoiValidate } from 'src/common/pipes/joi.pipe';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('books')
 @UseInterceptors(SuccessInterceptor, FailInterceptor)
+@UseGuards(JwtAuthGuard)
 export class BooksController {
 	constructor(private readonly bookService: BooksService) {}
 
 	@Get()
 	public getAll(): Promise<BookDocument[]> {
-		throw new Error('Тестовая ошибка!')
+		//throw new Error('Тестовая ошибка!')
 		return this.bookService.getAll()
 	}
 

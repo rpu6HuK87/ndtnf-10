@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BooksModule } from './modules/books/books.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 
 @Module({
@@ -17,7 +19,9 @@ import { BooksModule } from './modules/books/books.module';
 			useNewUrlParser: true,
 			useUnifiedTopology: true
 		}),
-		BooksModule
+		BooksModule,
+		AuthModule,
+		UsersModule
 	],
   controllers: [AppController],
   providers: [AppService],
