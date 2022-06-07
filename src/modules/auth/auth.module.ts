@@ -9,17 +9,17 @@ import { ConfigModule } from '@nestjs/config';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot(),
-		UsersModule,
-		PassportModule,
-		JwtModule.register({
-			secret: process.env.JWT_SECRET,
-			signOptions: { expiresIn: '60s' }
-		}),
-	],
-	controllers: [AuthController],
+  imports: [
+    ConfigModule.forRoot(),
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '60s' }
+    }),
+  ],
+  controllers: [AuthController],
   providers: [AuthService, JwtStrategy, LocalStrategy],
-	exports: [AuthService]
+  exports: [AuthService]
 })
 export class AuthModule {}

@@ -13,33 +13,33 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 @UseInterceptors(SuccessInterceptor, FailInterceptor)
 @UseGuards(JwtAuthGuard)
 export class BooksController {
-	constructor(private readonly bookService: BooksService) {}
+  constructor(private readonly bookService: BooksService) {}
 
-	@Get()
-	public getAll(): Promise<BookDocument[]> {
-		//throw new Error('Тестовая ошибка!')
-		return this.bookService.getAll()
-	}
+  @Get()
+  public getAll(): Promise<BookDocument[]> {
+    //throw new Error('Тестовая ошибка!')
+    return this.bookService.getAll()
+  }
 
-	@Get(':id')
-	@UsePipes(ValidateMongoDBObjectID)
-	public findOne(@Param('id') id: string): Promise<BookDocument> {
-		return this.bookService.findOne(id)
-	}
+  @Get(':id')
+  @UsePipes(ValidateMongoDBObjectID)
+  public findOne(@Param('id') id: string): Promise<BookDocument> {
+    return this.bookService.findOne(id)
+  }
 
-	@Post()
-	@UsePipes(new JoiValidate(createBookSchema))
-	public create(@Body() body: CreateBookDto): Promise<BookDocument> {
-		return this.bookService.create(body)
-	}
+  @Post()
+  @UsePipes(new JoiValidate(createBookSchema))
+  public create(@Body() body: CreateBookDto): Promise<BookDocument> {
+    return this.bookService.create(body)
+  }
 
-	@Put(':id')
-	public update(@Param('id') id: string, @Body() body: UpdateBookDto): Promise<BookDocument> {
-		return this.bookService.update(id, body)
-	}
+  @Put(':id')
+  public update(@Param('id') id: string, @Body() body: UpdateBookDto): Promise<BookDocument> {
+    return this.bookService.update(id, body)
+  }
 
-	@Delete(':id')
-	public delete(@Param('id') id: string): Promise<BookDocument> {
-		return this.bookService.delete(id)
-	}
+  @Delete(':id')
+  public delete(@Param('id') id: string): Promise<BookDocument> {
+    return this.bookService.delete(id)
+  }
 }

@@ -8,20 +8,20 @@ import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthController {
-	constructor(
-		private authService: AuthService,
-		private userService: UsersService
-	) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService
+  ) {}
 
-	@Post('api/users/signup')
-	@UsePipes(new JoiValidate(createUserSchema))
-	signIn(@Body() body: CreateUserDto) {
+  @Post('api/users/signup')
+  @UsePipes(new JoiValidate(createUserSchema))
+  signIn(@Body() body: CreateUserDto) {
     return this.userService.create(body);
-	}
+  }
 
-	@UseGuards(LocalAuthGuard)
-	@Post('api/users/signin')
-	async signin(@Request() req) {
+  @UseGuards(LocalAuthGuard)
+  @Post('api/users/signin')
+  async signin(@Request() req) {
     return this.authService.login(req.user);
   }
 }
