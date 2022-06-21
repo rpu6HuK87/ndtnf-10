@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.min.js"></script>
+</head>
+<body>
+    
+
+<span style="margin: auto;">
+<div class="form-group">
+    <div class="field">
+        <label for="text">Комментировать</label>
+        <textarea required
+        rows="3"
+        name="comment"
+        class="textarea is-primary"
+        placeholder="message" 
+        id="text"></textarea>
+    </div>
+</div>
+
+<button type="submit" id="send" class="button is-primary">Комментировать</button>
+</span>
+
+<hr>
+<h2 style="margin: auto;">Комментарии</h2>
+<ul style="margin: auto;" id="comments">
+    
+</ul>
+
+<script>
+    const socket = io.connect('//localhost:3000');
+    const inputText = document.querySelector('#text');
+    const sendBut = document.querySelector('#send');
+    const boxList = document.querySelector('#comments');
+    const getTmp = (msg) => {
+        return `
+                <li class="list-group-item list-group-item-action">
+                    <p class="mb-1">${msg}</p>
+                </li>
+        `;
+    };
+
+    socket.on('msgToClient', (msg) => {
+        const div = getTmp(msg);
+        boxList.insertAdjacentHTML('beforeend', div);
+    });
+
+    sendBut.addEventListener('click', () => {
+        socket.emit('msgToServer_addComment', {
+            text: inputText.value,
+        });
+    });
+
+</script>
+</body>
+</html>
