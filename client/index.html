@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
 </head>
 <body>
     
@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<button type="submit" id="send" class="button is-primary">Комментировать</button>
+<button type="submit" id="send" class="button is-primary">Комментировать книгу 629792000fa8368a0457d1ed</button>
 </span>
 
 <hr>
@@ -33,27 +33,45 @@
 </ul>
 
 <script>
-    const socket = io.connect('//localhost:3000');
+    const socket = io.connect('ws://devubun:3000');
+		socket.on('connect', () => {
+			console.log('connected')
+			//socket.join("book-comment");
+		})
+		/* io.on("connection", socket => {
+			
+		}); */
     const inputText = document.querySelector('#text');
     const sendBut = document.querySelector('#send');
     const boxList = document.querySelector('#comments');
-    const getTmp = (msg) => {
+    const template = (msg) => {
         return `
                 <li class="list-group-item list-group-item-action">
-                    <p class="mb-1">${msg}</p>
+                    <p class="mb-1">${msg.comment}</p>
                 </li>
         `;
     };
 
-    socket.on('msgToClient', (msg) => {
-        const div = getTmp(msg);
-        boxList.insertAdjacentHTML('beforeend', div);
+    socket.on('new-comment', (msg) => {
+			const div = template(msg.data);
+			boxList.insertAdjacentHTML('beforeend', div);
+    });
+
+		socket.emit('all-comments', '629792000fa8368a0457d1ed')
+		socket.on('all-comments', (msgs) => {			
+			msgs.map(msg => {
+				const div = template(msg);
+				boxList.insertAdjacentHTML('beforeend', div);
+			})
+			
     });
 
     sendBut.addEventListener('click', () => {
-        socket.emit('msgToServer_addComment', {
-            text: inputText.value,
-        });
+			console.log(inputText.value)
+			socket.emit('add-comment', {
+					bookID: '629792000fa8368a0457d1ed',
+					comment: inputText.value,
+			});
     });
 
 </script>

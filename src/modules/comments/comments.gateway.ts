@@ -15,7 +15,7 @@ import { CommentDocument } from './schemas/comment.schema';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
-@WebSocketGateway(3000, {namespace: 'book-comment'})
+@WebSocketGateway()
 export class BookCommentGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private CommentsService: CommentsService) {}
 
@@ -38,18 +38,19 @@ export class BookCommentGateway implements OnGatewayInit, OnGatewayConnection, O
     @MessageBody() data: unknown,
     @ConnectedSocket() client: Socket
   ): any {
+		console.log('add-comment', data)
     this.CommentsService.create(data as CreateCommentDto);
     this.ws.emit('new-comment', { data });
   }
 
-  @SubscribeMessage('get-all-comments')
+  @SubscribeMessage('all-comments')
   getAllComments(
     @MessageBody() bookID: unknown,
     @ConnectedSocket() client: Socket
   ): Observable<WsResponse<CommentDocument[]>> {
     const data = this.CommentsService.findAllBookComment(bookID as string);
     return from(data).pipe(
-      map((data) => ({ event: 'get-all-comments', data }))
+      map((data) => ({ event: 'all-comments', data }))
     );
   }
 }
